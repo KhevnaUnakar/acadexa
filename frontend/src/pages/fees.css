@@ -1,0 +1,149 @@
+
+.fees-page {
+    padding: 24px;
+    color: #1e293b;
+}
+
+.fees-page h1 {
+    margin-bottom: 8px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.fees-page > p {
+    margin-bottom: 20px;
+    color: #64748b;
+}
+
+.fees-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.fees-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.fees-table th {
+    padding: 14px 16px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.fees-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: nowrap;
+}
+
+.fees-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.fees-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.fee-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.fee-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.fee-status.partial {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.fee-status.paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.error-message {
+    color: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .fees-page {
+        padding: 16px;
+    }
+
+    .fees-page h1 {
+        font-size: 24px;
+    }
+}
+.fee-form-container {
+    background: #fff;
+    padding: 20px;
+    margin: 24px 0;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.fee-form-container h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+
+.fee-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.fee-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.fee-form input,
+.fee-form select {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.fee-form button {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.fee-form button:hover {
+    background: #4338ca;
+}
+
+.form-message {
+    margin: 14px 0 0;
+    font-size: 14px;
+}

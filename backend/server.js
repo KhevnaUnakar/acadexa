@@ -1,0 +1,42 @@
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
+const connectDB = require("./config/db");
+const studentRoutes = require("./routes/studentRoutes");
+const courseRoutes = require("./routes/courseRoutes");
+const feeRoutes = require("./routes/feeRoutes");
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Student API routes
+app.use("/api/students", studentRoutes);
+
+// Course API routes
+app.use("/api/courses", courseRoutes);
+
+// Fee API routes
+app.use("/api/fees", feeRoutes);
+
+
+// Test route
+app.get("/", (req, res) => {
+    res.send("Student Management System API is running!");
+});
+
+// Start server after connecting to MongoDB
+const startServer = async () => {
+    await connectDB();
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+};
+
+startServer();
