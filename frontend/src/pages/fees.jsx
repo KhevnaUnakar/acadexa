@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllStudents } from "../services/studentService";
 import { getAllCourses } from "../services/courseService";
-import { getAllFees, createFee } from "../services/feeService";
+import { getAllFees, createFee, addPayment } from "../services/feeService";
 import "./fees.css";
 
 function Fees() {
@@ -14,6 +14,12 @@ function Fees() {
     const [selectedCourse, setSelectedCourse] = useState("");
     const [feeOverride, setFeeOverride] = useState("");
     const [formMessage, setFormMessage] = useState("");
+    const [paymentFee, setPaymentFee] = useState(null);
+    const [paymentAmount, setPaymentAmount] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("Cash");
+    const [paymentMessage, setPaymentMessage] = useState("");
+    const [paymentError, setPaymentError] = useState("");
+    const [savingPayment, setSavingPayment] = useState(false);
 
     const refreshFees = async () => {
         const data = await getAllFees();
@@ -70,6 +76,53 @@ function Fees() {
             setFormMessage(
                 err.response?.data?.message || "Unable to create fee record."
             );
+        }
+    };
+
+    const openPaymentForm = (fee) => {
+        setPaymentFee(fee);
+        setPaymentAmount("");
+        setPaymentMethod("Cash");
+        setPaymentMessage("");
+        setPaymentError("");
+    };
+
+    const handleRecordPayment = async (e) => {
+        e.preventDefault();
+        setPaymentMessage("");
+        setPaymentError("");
+
+        const amount = Number(paymentAmount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            setPaymentError("Enter a payment amount greater than zero.");
+            return;
+        }
+        if (amount > paymentFee.balance) {
+            setPaymentError("Payment cannot exceed the outstanding balance.");
+            return;
+        }
+
+        setSavingPayment(true);
+        try {
+            await addPayment(paymentFee._id, { amount, paymentMethod });
+            setPaymentFee(null);
+            setPaymentAmount("");
+            setPaymentMessage("Payment recorded successfully.");
+            try {
+                await refreshFees();
+            } catch (err) {
+                console.error("Payment recorded but fee records could not be refreshed:", err);
+                setPaymentMessage(
+                    "Payment recorded successfully, but fee records could not be refreshed. Please reload the page."
+                );
+            }
+        } catch (err) {
+            console.error("Error recording payment:", err.response?.data || err.message);
+            setPaymentError(
+                err.response?.data?.message || "Unable to record payment. Please try again."
+            );
+        } finally {
+            setSavingPayment(false);
         }
     };
 
@@ -137,6 +190,61 @@ function Fees() {
             {!loading && error && (
                 <p className="error-message">{error}</p>
             )}
+            {paymentMessage && <p className="form-message success-message" role="status">{paymentMessage}</p>}
+
+            {paymentFee && (
+                <section className="fee-payment-panel" aria-labelledby="payment-form-title">
+                    <div className="fee-payment-heading">
+                        <div>
+                            <h2 id="payment-form-title">Record Payment</h2>
+                            <p>
+                                {paymentFee.student?.firstName} {paymentFee.student?.lastName}
+                                {" · "}Outstanding: ₹{Number(paymentFee.balance).toLocaleString("en-IN")}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            className="fee-cancel-button"
+                            onClick={() => setPaymentFee(null)}
+                            disabled={savingPayment}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                    <form className="fee-form" onSubmit={handleRecordPayment}>
+                        <label>
+                            Installment Amount (₹)
+                            <input
+                                type="number"
+                                min="0.01"
+                                max={paymentFee.balance}
+                                step="0.01"
+                                value={paymentAmount}
+                                onChange={(e) => setPaymentAmount(e.target.value)}
+                                required
+                            />
+                        </label>
+                        <label>
+                            Payment Method
+                            <select
+                                value={paymentMethod}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                required
+                            >
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Card">Card</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                        <button type="submit" disabled={savingPayment}>
+                            {savingPayment ? "Saving..." : "Save Payment"}
+                        </button>
+                    </form>
+                    {paymentError && <p className="error-message" role="alert">{paymentError}</p>}
+                </section>
+            )}
                
             {!loading && !error && (
                 <>
@@ -153,13 +261,14 @@ function Fees() {
                                     <th>Paid Amount</th>
                                     <th>Balance</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 {fees.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7">
+                                        <td colSpan="8">
                                             No fee records found.
                                         </td>
                                     </tr>
@@ -184,6 +293,19 @@ function Fees() {
                                                 <span className={`fee-status ${fee.paymentStatus?.toLowerCase()}`}>
                                                     {fee.paymentStatus}
                                                 </span>
+                                            </td>
+                                            <td>
+                                                {fee.balance > 0 ? (
+                                                    <button
+                                                        type="button"
+                                                        className="record-payment-button"
+                                                        onClick={() => openPaymentForm(fee)}
+                                                    >
+                                                        Record payment
+                                                    </button>
+                                                ) : (
+                                                    <span className="payment-complete">Paid in full</span>
+                                                )}
                                             </td>
                                         </tr>
                                     ))

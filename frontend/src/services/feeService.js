@@ -13,3 +13,8 @@ export const createFee = async (feeData) => {
     const response = await API.post("/", feeData);
     return response.data;
 };
+
+export const addPayment = async (feeId, paymentData) => {
+    const response = await API.post(`/${feeId}/payments`, paymentData);
+    return response.data;
+};
