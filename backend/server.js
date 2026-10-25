@@ -6,6 +6,11 @@ const connectDB = require("./config/db");
 const studentRoutes = require("./routes/studentRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const feeRoutes = require("./routes/feeRoutes");
+const Department = require("./models/department");
+const Admission = require("./models/admission");
+const Attendance = require("./models/attendance");
+const Examination = require("./models/examination");
+const createAcademicRecordRoutes = require("./routes/academicRecordRoutes");
 
 const app = express();
 
@@ -21,6 +26,35 @@ app.use("/api/courses", courseRoutes);
 
 // Fee API routes
 app.use("/api/fees", feeRoutes);
+app.use(
+    "/api/departments",
+    createAcademicRecordRoutes(Department, ["departmentName", "departmentCode", "description"])
+);
+app.use(
+    "/api/admissions",
+    createAcademicRecordRoutes(
+        Admission,
+        ["student", "course", "admissionDate", "admissionStatus"],
+        [
+            { path: "student", select: "studentId firstName lastName" },
+            { path: "course", select: "courseCode courseName" }
+        ]
+    )
+);
+app.use(
+    "/api/attendance",
+    createAcademicRecordRoutes(Attendance, ["student", "date", "status"], [
+        { path: "student", select: "studentId firstName lastName" }
+    ])
+);
+app.use(
+    "/api/examinations",
+    createAcademicRecordRoutes(
+        Examination,
+        ["student", "subject", "totalMarks", "marksObtained", "result"],
+        [{ path: "student", select: "studentId firstName lastName" }]
+    )
+);
 
 
 // Test route

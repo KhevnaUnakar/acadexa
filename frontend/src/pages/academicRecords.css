@@ -1,0 +1,63 @@
+.academic-records-page {
+    color: var(--text-primary);
+}
+
+.academic-form-panel {
+    margin-bottom: 20px;
+    padding: 21px 22px;
+}
+
+.academic-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.academic-form-grid textarea {
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #dfe2e9;
+    border-radius: 6px;
+    resize: vertical;
+    font-size: 11px;
+}
+
+.academic-form-grid input,
+.academic-form-grid select {
+    width: 100%;
+    min-width: 0;
+    height: 37px;
+    padding: 0 10px;
+    border: 1px solid #dfe2e9;
+    border-radius: 6px;
+    color: #344054;
+    background: #fff;
+    font-size: 11px;
+}
+
+.academic-form-grid input:focus,
+.academic-form-grid select:focus,
+.academic-form-grid textarea:focus {
+    border-color: #818cf8;
+    outline: 3px solid rgba(99, 102, 241, 0.12);
+}
+
+.academic-table-panel {
+    overflow: hidden;
+}
+
+.academic-empty {
+    padding: 30px !important;
+    color: var(--text-muted) !important;
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .academic-form-panel {
+        padding: 17px 14px;
+    }
+
+    .academic-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
