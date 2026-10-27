@@ -4,8 +4,24 @@ const admissionSchema = new mongoose.Schema(
     {
         student: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Student",
-            required: true
+            ref: "Student"
+        },
+        applicantFirstName: {
+            type: String,
+            trim: true
+        },
+        applicantLastName: {
+            type: String,
+            trim: true
+        },
+        applicantEmail: {
+            type: String,
+            lowercase: true,
+            trim: true
+        },
+        applicantPhone: {
+            type: String,
+            trim: true
         },
         course: {
             type: mongoose.Schema.Types.ObjectId,
@@ -24,5 +40,7 @@ const admissionSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+admissionSchema.index({ applicantEmail: 1, course: 1 });
 
 module.exports = mongoose.model("Admission", admissionSchema);

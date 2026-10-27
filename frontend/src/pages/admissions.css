@@ -1,0 +1,119 @@
+.admissions-page .admission-feedback {
+    margin: 0 0 16px;
+    padding: 11px 14px;
+    border: 1px solid;
+    border-radius: 9px;
+    font-size: 12px;
+}
+
+.admission-success {
+    border-color: #a7f3d0 !important;
+    color: #166534;
+    background: #f0fdf4;
+}
+
+.admission-error {
+    border-color: #fecaca !important;
+    color: #b42318;
+    background: #fff5f5;
+}
+
+.admission-form-type {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 18px;
+    color: #475467;
+    font-size: 12px;
+}
+
+.admission-form-type > span {
+    font-weight: 700;
+}
+
+.admission-form-type label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+}
+
+.admission-form-type input {
+    accent-color: var(--accent);
+}
+
+.admission-selected-student {
+    margin: 14px 0 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.admission-search {
+    display: block;
+    width: min(250px, 100%);
+}
+
+.admission-search input {
+    width: 100%;
+    min-height: 37px;
+    padding: 0 11px;
+    border: 1px solid #dfe2e9;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--text-primary);
+    font-size: 11px;
+}
+
+.admission-applicant-meta {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 10px;
+}
+
+.admission-status {
+    display: inline-flex;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.admission-status-applied {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.admission-status-approved {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.admission-status-rejected {
+    color: #b42318;
+    background: #fee2e2;
+}
+
+.admission-row-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admission-row-actions button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+    .admission-form-type {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .admission-search {
+        width: 100%;
+    }
+}

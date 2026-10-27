@@ -6,9 +6,9 @@ const connectDB = require("./config/db");
 const studentRoutes = require("./routes/studentRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const feeRoutes = require("./routes/feeRoutes");
+const admissionRoutes = require("./routes/admissionRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
 const Department = require("./models/department");
-const Admission = require("./models/admission");
-const Attendance = require("./models/attendance");
 const Examination = require("./models/examination");
 const createAcademicRecordRoutes = require("./routes/academicRecordRoutes");
 
@@ -30,23 +30,8 @@ app.use(
     "/api/departments",
     createAcademicRecordRoutes(Department, ["departmentName", "departmentCode", "description"])
 );
-app.use(
-    "/api/admissions",
-    createAcademicRecordRoutes(
-        Admission,
-        ["student", "course", "admissionDate", "admissionStatus"],
-        [
-            { path: "student", select: "studentId firstName lastName" },
-            { path: "course", select: "courseCode courseName" }
-        ]
-    )
-);
-app.use(
-    "/api/attendance",
-    createAcademicRecordRoutes(Attendance, ["student", "date", "status"], [
-        { path: "student", select: "studentId firstName lastName" }
-    ])
-);
+app.use("/api/admissions", admissionRoutes);
+app.use("/api/attendance", attendanceRoutes);
 app.use(
     "/api/examinations",
     createAcademicRecordRoutes(
