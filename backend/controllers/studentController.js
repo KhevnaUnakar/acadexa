@@ -68,7 +68,10 @@ const createStudent = async (req, res) => {
 
 const getAllStudents = async (req,res) => {
     try{
-        const students = await Student.find().sort({ createdAt: -1 });
+        const students = await Student.find()
+            .populate("course", "courseCode courseName")
+            .populate("department", "departmentCode departmentName")
+            .sort({ createdAt: -1 });
 
         return res.status(200).json({
             count: students.length,
@@ -94,7 +97,9 @@ const getStudentById = async (req,res) => {
             });
         }
 
-        const student = await Student.findById(id);
+        const student = await Student.findById(id)
+            .populate("course", "courseCode courseName")
+            .populate("department", "departmentCode departmentName");
 
         if(!student){
             return res.status(404).json({
